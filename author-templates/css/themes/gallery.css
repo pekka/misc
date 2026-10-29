@@ -13,6 +13,7 @@
   --frame: #ffffff;
   --line: rgba(29, 29, 27, .16);
   --wall-shadow: 0 1px 1px rgba(0, 0, 0, .05), 0 20px 40px -18px rgba(0, 0, 0, .28);
+  --header-shadow: 0 1px 0 var(--line);
 }
 :root[data-tone="dark"] {
   --ink: #ecebe6;
@@ -25,7 +26,7 @@
 body {
   background: var(--bg);
   color: var(--ink);
-  font: 300 1rem/1.7 Inter, system-ui, sans-serif;
+  font: 300 1.2rem/1.65 Inter, system-ui, sans-serif;
 }
 a { color: inherit; }
 h1, h2, h3 { margin: 0; font-family: "Instrument Serif", Georgia, serif; font-weight: 400; line-height: 1.02; }
@@ -46,10 +47,10 @@ p { margin: 0; }
   padding-block: 32px;
 }
 .brand { text-decoration: none; display: flex; align-items: baseline; gap: 12px; }
-.brand-name { font-size: .82rem; font-weight: 500; letter-spacing: .22em; text-transform: uppercase; }
-.brand-role { font: italic 1.05rem/1 "Instrument Serif", serif; color: var(--ink-soft); }
+.brand-name { font-size: 1rem; font-weight: 500; letter-spacing: .22em; text-transform: uppercase; }
+.brand-role { font: italic 1.3rem/1 "Instrument Serif", serif; color: var(--ink-soft); }
 .site-nav ul { display: flex; flex-wrap: wrap; gap: 4px 26px; margin: 0; padding: 0; list-style: none; }
-.site-nav a { font-size: .78rem; text-decoration: none; color: var(--ink-soft); text-transform: lowercase; }
+.site-nav a { font-size: .95rem; text-decoration: none; color: var(--ink-soft); text-transform: lowercase; }
 .site-nav a:hover { color: var(--ink); text-decoration: underline; text-underline-offset: 4px; }
 
 /* ---------- buttons: understated text links ---------- */
@@ -58,7 +59,7 @@ p { margin: 0; }
   align-items: center;
   gap: .6em;
   padding: .3em 0;
-  font-size: .78rem;
+  font-size: .95rem;
   text-decoration: none;
   color: var(--ink-soft);
   border-bottom: 1px solid var(--line);
@@ -87,18 +88,18 @@ p { margin: 0; }
   display: flex;
   justify-content: space-between;
   margin-top: 12px;
-  font-size: .72rem;
+  font-size: .9rem;
   color: var(--ink-soft);
 }
 .hero-caption::before { content: "Fig. 1"; }
-.hero-kicker { margin-bottom: 28px; font-size: .74rem; letter-spacing: .1em; color: var(--ink-soft); }
+.hero-kicker { margin-bottom: 28px; font-size: .92rem; letter-spacing: .1em; color: var(--ink-soft); }
 .hero-kicker::before { content: "(A) "; }
 .hero-title {
-  font-size: clamp(3.4rem, 8.6vw, 8.4rem);
+  font-size: clamp(3.8rem, 9.4vw, 9.4rem);
   letter-spacing: -.035em;
   line-height: .9;
 }
-.hero-sub { margin-top: 32px; max-width: 34ch; font: italic 400 clamp(1.3rem, 2.2vw, 1.7rem)/1.3 "Instrument Serif", serif; color: var(--ink-soft); }
+.hero-sub { margin-top: 32px; max-width: 34ch; font: italic 400 clamp(1.55rem, 2.6vw, 2.1rem)/1.3 "Instrument Serif", serif; color: var(--ink-soft); }
 .hero-actions { display: flex; flex-wrap: wrap; gap: 10px 28px; margin-top: 44px; }
 
 /* ---------- section heads ---------- */
@@ -116,10 +117,10 @@ main { counter-reset: room; }
 }
 .section-head::before {
   content: "0" counter(room);
-  font: 400 .74rem/1 "DM Mono", monospace;
+  font: 400 .92rem/1 "DM Mono", monospace;
   color: var(--ink-soft);
 }
-.section-head h2 { font-size: clamp(2rem, 4vw, 3.2rem); letter-spacing: -.02em; }
+.section-head h2 { font-size: clamp(2.4rem, 4.8vw, 3.9rem); letter-spacing: -.02em; }
 
 /* ---------- books: framed works with wall labels ---------- */
 .books { counter-reset: work; }
@@ -133,18 +134,18 @@ main { counter-reset: room; }
 }
 .book-cover:hover { transform: translateY(-4px); }
 .book-cover img { width: 100%; aspect-ratio: 5 / 8; object-fit: cover; }
-.book-info { font-size: .9rem; }
-.book-title { font-size: 1.6rem; letter-spacing: -.01em; }
+.book-info { font-size: 1.08rem; }
+.book-title { font-size: 2rem; letter-spacing: -.01em; }
 .book-title::before {
   content: "No. " counter(work, decimal-leading-zero);
   display: block;
   margin-bottom: 10px;
-  font: 400 .7rem/1 "DM Mono", monospace;
+  font: 400 .85rem/1 "DM Mono", monospace;
   color: var(--ink-soft);
 }
 .book-title a { text-decoration: none; }
 .book-tagline { margin-top: 8px; color: var(--ink-soft); }
-.book-meta { margin: 16px 0 18px; font-size: .72rem; }
+.book-meta { margin: 16px 0 18px; font-size: .88rem; }
 .book-meta div { display: flex; gap: 10px; }
 .book-meta dt { color: var(--ink-soft); min-width: 52px; }
 .book-meta dt::after { content: ":"; }
@@ -153,13 +154,13 @@ main { counter-reset: room; }
 /* one book: one large work, label to the lower right */
 .books[data-layout="single"] .book {
   display: grid;
-  grid-template-columns: minmax(0, 400px) minmax(0, 300px);
+  grid-template-columns: minmax(0, 400px) minmax(0, 360px);
   justify-content: center;
   align-items: end;
   gap: clamp(32px, 6vw, 80px);
 }
 .books[data-layout="single"] .book-info { padding-bottom: 20px; border-left: 1px solid var(--line); padding-left: 24px; }
-.books[data-layout="single"] .book-title { font-size: clamp(1.8rem, 3vw, 2.4rem); }
+.books[data-layout="single"] .book-title { font-size: clamp(2.2rem, 3.6vw, 3rem); }
 
 /* two books: hung side by side, labels to the right of each */
 .books[data-layout="pair"] {
@@ -188,14 +189,14 @@ main { counter-reset: room; }
 .books[data-layout="grid"] .book { flex: 0 1 240px; }
 .books[data-layout="grid"][data-density="dense"] .book { flex-basis: 190px; }
 .books[data-layout="grid"] .book-info { margin-top: 22px; }
-.books[data-layout="grid"] .book-title { font-size: 1.3rem; }
-.books[data-layout="grid"] .book-tagline { font-size: .82rem; }
+.books[data-layout="grid"] .book-title { font-size: 1.6rem; }
+.books[data-layout="grid"] .book-tagline { font-size: 1rem; }
 .books[data-layout="grid"][data-density="dense"] .book-tagline { display: none; }
 
 /* ---------- series: a row of small frames ---------- */
 .series-card {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 340px);
+  grid-template-columns: minmax(0, 1fr) minmax(0, 400px);
   gap: clamp(32px, 6vw, 96px);
   align-items: end;
 }
@@ -216,7 +217,7 @@ main { counter-reset: room; }
   background: var(--frame);
   box-shadow: var(--wall-shadow);
 }
-.series-title { font-size: clamp(1.8rem, 3vw, 2.6rem); }
+.series-title { font-size: clamp(2.2rem, 3.6vw, 3.2rem); }
 .series-title a { text-decoration: none; }
 .series-desc { margin: 12px 0 24px; color: var(--ink-soft); }
 
@@ -228,8 +229,8 @@ main { counter-reset: room; }
   padding-top: 18px;
   border-top: 1px solid var(--line);
 }
-.about h2 { font-size: clamp(2rem, 4vw, 3.2rem); grid-row: span 2; }
-.about-text { font: 400 clamp(1.4rem, 2.6vw, 2.1rem)/1.3 "Instrument Serif", serif; }
+.about h2 { font-size: clamp(2.4rem, 4.8vw, 3.9rem); grid-row: span 2; }
+.about-text { font: 400 clamp(1.7rem, 3.1vw, 2.6rem)/1.3 "Instrument Serif", serif; }
 .about .btn { justify-self: start; }
 
 .news .section-head { margin-bottom: 20px; }
@@ -244,7 +245,7 @@ main { counter-reset: room; }
   margin-top: clamp(80px, 12vw, 160px);
   padding-block: 24px 40px;
   border-top: 1px solid var(--line);
-  font-size: .72rem;
+  font-size: .9rem;
   color: var(--ink-soft);
 }
 .site-footer p { margin: 0; }
@@ -259,11 +260,14 @@ main { counter-reset: room; }
   .about h2 { grid-row: auto; }
 }
 @media (max-width: 640px) {
+  .site-header { padding-block: 14px; gap: 6px; }
+  .brand-name { font-size: .85rem; letter-spacing: .14em; }
+  .brand-role { display: none; }
   .books[data-layout="single"] .book { grid-template-columns: 1fr; justify-items: center; }
   .books[data-layout="single"] .book-cover { width: min(300px, 86%); }
   .books[data-layout="single"] .book-info { width: min(300px, 86%); }
   .books[data-layout="pair"] .book { grid-template-columns: 140px minmax(0, 1fr); gap: 16px; }
-  .books[data-layout="pair"] .book-title { font-size: 1.25rem; }
+  .books[data-layout="pair"] .book-title { font-size: 1.5rem; }
   .books[data-layout="pair"] .book-tagline { display: none; }
   .books[data-layout="grid"],
   .books[data-layout="grid"][data-density="dense"] { gap: 40px 18px; max-width: none; }
@@ -272,7 +276,7 @@ main { counter-reset: room; }
   .books[data-layout="grid"] .book-cover { padding: 10px; }
   .books[data-layout="grid"] .book-tagline,
   .books[data-layout="grid"] .book-meta { display: none; }
-  .books[data-layout="grid"] .book-title { font-size: 1.1rem; }
+  .books[data-layout="grid"] .book-title { font-size: 1.3rem; }
   .section-head { grid-template-columns: auto 1fr; }
   .section-head .btn { grid-column: 1 / -1; justify-self: start; }
 }

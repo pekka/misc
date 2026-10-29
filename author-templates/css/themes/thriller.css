@@ -1,0 +1,399 @@
+/* ==========================================================
+   THRILLER — bold, dark, high tension.
+   Anton headlines, Barlow body, Special Elite typewriter for
+   case-file labels. Near-black, blood red, a red-toned
+   high-contrast portrait, crime-scene tape ticker, books
+   filed as numbered evidence.
+   ========================================================== */
+@import url('https://fonts.googleapis.com/css2?family=Anton&family=Barlow:wght@400;500;600&family=Barlow+Condensed:wght@500;700&family=Special+Elite&display=swap');
+
+:root {
+  --bg: #0b0b0c;
+  --ink: #f2f2f2;
+  --ink-soft: #9a9a9e;
+  --red: #e10600;
+  --panel: #151517;
+  --line: rgba(255, 255, 255, .14);
+  --paper: #e9e4d8;
+  --paper-ink: #1a1a1a;
+  --header-bg: var(--bg);
+  --header-shadow: 0 3px 0 var(--red);
+}
+:root[data-tone="light"] {
+  --ink: #111113;
+  --ink-soft: #55555b;
+  --red: #c80500;
+  --panel: rgba(0, 0, 0, .05);
+  --line: rgba(0, 0, 0, .16);
+}
+
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font: 400 1.05rem/1.6 Barlow, system-ui, sans-serif;
+}
+a { color: inherit; }
+h1, h2, h3 { margin: 0; font-family: Anton, Impact, sans-serif; font-weight: 400; line-height: .95; text-transform: uppercase; letter-spacing: .01em; }
+p { margin: 0; }
+.site-nav a, .btn, .book-meta dt, .site-footer, .hero-kicker, .section-head .btn {
+  font-family: "Barlow Condensed", Barlow, sans-serif;
+}
+
+.site { max-width: 1240px; margin: 0 auto; padding: 0 clamp(16px, 4vw, 40px); }
+
+/* ---------- header ---------- */
+.site-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px 28px;
+  padding-block: 18px;
+  border-bottom: 1px solid var(--line);
+}
+.brand { display: flex; align-items: center; gap: 12px; text-decoration: none; }
+.brand-name { font: 400 1.6rem/1 Anton, sans-serif; text-transform: uppercase; letter-spacing: .04em; }
+.brand-role {
+  padding: 3px 7px;
+  background: var(--red);
+  color: #fff;
+  font: 700 .72rem/1 "Barlow Condensed", sans-serif;
+  letter-spacing: .2em;
+  text-transform: uppercase;
+}
+.site-nav ul { display: flex; flex-wrap: wrap; gap: 4px 26px; margin: 0; padding: 0; list-style: none; }
+.site-nav a {
+  text-decoration: none;
+  font-size: .95rem;
+  font-weight: 700;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+}
+.site-nav a:hover { color: var(--red); }
+
+/* ---------- buttons ---------- */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: .6em;
+  padding: .8em 1.4em;
+  border: 2px solid var(--ink);
+  font-size: .95rem;
+  font-weight: 700;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  text-decoration: none;
+  transition: background .2s, color .2s, border-color .2s;
+}
+.btn:hover { background: var(--ink); color: var(--bg); }
+.btn-primary { background: var(--red); border-color: var(--red); color: #fff; }
+.btn-primary:hover { background: transparent; color: var(--red); border-color: var(--red); }
+.btn-small { padding: .55em 1em; font-size: .85rem; }
+
+/* ---------- hero: full-bleed red-toned portrait ---------- */
+.hero {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  align-items: end;
+  min-height: min(86vh, 780px);
+  margin-inline: calc(-1 * clamp(16px, 4vw, 40px));
+  padding: clamp(40px, 8vw, 90px) clamp(16px, 4vw, 40px);
+  overflow: hidden;
+}
+.hero-photo { position: absolute; inset: 0; margin: 0; z-index: 0; }
+.hero-photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 60% 30%;
+  filter: grayscale(1) contrast(1.35) brightness(1.05);
+}
+/* red tone over the photo, then fades into the page so the title reads */
+.hero-photo::before,
+.hero-photo::after { content: ""; position: absolute; inset: 0; z-index: 1; pointer-events: none; }
+.hero-photo::before { background: #e8291f; mix-blend-mode: multiply; }
+.hero-photo::after {
+  background:
+    linear-gradient(to top, var(--bg) 3%, transparent 50%),
+    linear-gradient(to right, var(--bg) 0%, color-mix(in srgb, var(--bg) 55%, transparent) 40%, transparent 75%);
+}
+:root[data-tone="light"] .hero-photo::before { display: none; }
+.hero-caption {
+  position: absolute;
+  right: clamp(16px, 4vw, 40px);
+  top: 24px;
+  padding: 4px 8px;
+  background: var(--paper);
+  color: var(--paper-ink);
+  font: 400 .8rem/1.2 "Special Elite", monospace;
+  transform: rotate(2deg);
+  z-index: 2;
+}
+.hero-caption::before { content: "EXHIBIT A — "; }
+.hero-text { position: relative; z-index: 1; max-width: 760px; }
+.hero-kicker {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 18px;
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: .3em;
+  text-transform: uppercase;
+  color: var(--red);
+}
+.hero-kicker::before { content: ""; width: 10px; height: 10px; border-radius: 50%; background: var(--red); box-shadow: 0 0 12px var(--red); }
+.hero-title {
+  font-size: clamp(3.6rem, 11vw, 9.5rem);
+  line-height: .86;
+  color: var(--ink);
+}
+.hero-sub {
+  display: inline;
+  margin-top: 22px;
+  padding: 2px 8px;
+  background: var(--ink);
+  color: var(--bg);
+  font-size: clamp(1.1rem, 2vw, 1.35rem);
+  font-weight: 600;
+  line-height: 1.7;
+  box-decoration-break: clone;
+  -webkit-box-decoration-break: clone;
+}
+.hero-title { margin-bottom: 22px; }
+.hero-actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 32px; }
+.hero-actions .btn:not(.btn-primary) { border-color: var(--ink); color: var(--ink); }
+
+/* ---------- ticker: crime-scene tape ---------- */
+body .ticker {
+  display: block;
+  position: relative;
+  z-index: 2;
+  margin: -18px calc(-1 * clamp(16px, 4vw, 40px)) 0;
+  overflow: hidden;
+  background: #f5c400;
+  color: #111;
+  transform: rotate(-1.4deg);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, .5);
+}
+.ticker-track { display: flex; width: max-content; animation: th-tape 30s linear infinite; }
+.ticker-track span {
+  padding: 10px 0;
+  font: 400 1.05rem/1 Anton, sans-serif;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+.ticker-track span::after { content: "✕"; padding: 0 24px; }
+@keyframes th-tape { to { transform: translateX(-50%); } }
+@media (prefers-reduced-motion: reduce) { .ticker-track { animation: none; } }
+
+/* ---------- section heads ---------- */
+section + section, .ticker + section { margin-top: clamp(72px, 10vw, 130px); }
+.section-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 14px;
+  margin-bottom: 40px;
+  padding-bottom: 14px;
+  border-bottom: 3px solid var(--red);
+}
+.section-head h2 { font-size: clamp(2.6rem, 6.4vw, 5rem); }
+.section-head .btn { border: 0; padding: 0; color: var(--red); }
+.section-head .btn:hover { background: none; color: var(--ink); }
+
+/* ---------- books: case files ---------- */
+.books { counter-reset: case; }
+.book { counter-increment: case; position: relative; }
+.book-cover { display: block; position: relative; }
+.book-cover img {
+  width: 100%;
+  aspect-ratio: 5 / 8;
+  object-fit: cover;
+  box-shadow: 10px 10px 0 var(--red), 0 30px 50px -20px rgba(0, 0, 0, .8);
+  transition: transform .25s, box-shadow .25s;
+}
+.book-cover:hover img { transform: translate(-4px, -4px); box-shadow: 14px 14px 0 var(--red), 0 30px 50px -20px rgba(0, 0, 0, .8); }
+.book-title { font-size: 2rem; }
+.book-title::before {
+  content: "Case file № " counter(case, decimal-leading-zero);
+  display: block;
+  margin-bottom: 12px;
+  font: 400 .9rem/1 "Special Elite", monospace;
+  letter-spacing: .04em;
+  text-transform: none;
+  color: var(--red);
+}
+.book-title a { text-decoration: none; }
+.book-title a:hover { color: var(--red); }
+.book-tagline { margin-top: 12px; color: var(--ink-soft); font-size: 1.1rem; }
+.book-meta {
+  margin: 20px 0 26px;
+  padding: 14px 16px;
+  background: var(--paper);
+  color: var(--paper-ink);
+  font-family: "Special Elite", monospace;
+  font-size: .92rem;
+  transform: rotate(-.6deg);
+  box-shadow: 3px 4px 0 rgba(0, 0, 0, .35);
+}
+.book-meta div { display: flex; gap: 10px; padding: 3px 0; }
+.book-meta dt { flex: none; width: 66px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; font-size: .8rem; padding-top: 2px; }
+.book-meta dd { margin: 0; }
+
+/* one book: the big reveal */
+.books[data-layout="single"] .book {
+  display: grid;
+  grid-template-columns: minmax(0, 360px) minmax(0, 500px);
+  justify-content: center;
+  align-items: center;
+  gap: clamp(40px, 7vw, 96px);
+}
+.books[data-layout="single"] .book-title { font-size: clamp(2.6rem, 5.4vw, 4.4rem); }
+
+/* two books: side by side, cover beside details */
+.books[data-layout="pair"] { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 48px; }
+.books[data-layout="pair"] .book {
+  display: grid;
+  grid-template-columns: minmax(0, 200px) minmax(0, 1fr);
+  align-items: center;
+  gap: 32px;
+}
+.books[data-layout="pair"] .book-title { font-size: 1.7rem; }
+
+/* three or more: an evidence wall */
+.books[data-layout="grid"] {
+  --gap-y: 56px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  --gap: 36px;
+  gap: var(--gap-y, var(--gap)) var(--gap);
+}
+.books[data-layout="grid"] > .book { flex: 0 0 calc((100% - (var(--cols) - 1) * var(--gap)) / var(--cols)); min-width: 0; }
+.books[data-layout="grid"] .book { display: flex; flex-direction: column; }
+.books[data-layout="grid"] .book-cover { margin: 0 10px 34px 0; }
+.books[data-layout="grid"] .book-info { display: flex; flex-direction: column; flex: 1; }
+.books[data-layout="grid"] .book-title { font-size: 1.45rem; }
+.books[data-layout="grid"] .book-title::before { font-size: .8rem; margin-bottom: 8px; }
+.books[data-layout="grid"] .book-tagline { font-size: .95rem; }
+.books[data-layout="grid"] .book-meta { display: none; }
+.books[data-layout="grid"] .book-cta { margin-top: 20px; align-self: flex-start; }
+.books[data-layout="grid"][data-density="dense"] .book-tagline { display: none; }
+
+/* ---------- series: scattered evidence photos ---------- */
+.series-card {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  align-items: center;
+  gap: 40px;
+  padding: clamp(28px, 5vw, 56px);
+  background: var(--panel);
+  border-left: 6px solid var(--red);
+}
+.series-stack { position: relative; display: block; height: 320px; }
+.series-stack img {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 150px;
+  aspect-ratio: 5 / 8;
+  object-fit: cover;
+  border: 8px solid var(--paper);
+  border-bottom-width: 26px;
+  box-shadow: 0 16px 30px -10px rgba(0, 0, 0, .8);
+  transform:
+    translate(-50%, -50%)
+    translate(calc((var(--i) - (var(--n) - 1) / 2) * 46px), calc(sin(var(--i) * 2.1) * 18px))
+    rotate(calc(sin(var(--i) * 1.7 + 1) * 9deg));
+}
+.series-title { font-size: clamp(2.2rem, 4.4vw, 3.6rem); }
+.series-title a { text-decoration: none; }
+.series-desc { margin: 14px 0 28px; font-size: 1.2rem; color: var(--ink-soft); }
+
+/* ---------- about: a typed dossier ---------- */
+.about {
+  position: relative;
+  max-width: 860px;
+  margin-inline: auto;
+  padding: clamp(28px, 5vw, 56px);
+  background: var(--paper);
+  color: var(--paper-ink);
+  transform: rotate(-.5deg);
+  box-shadow: 0 30px 60px -30px rgba(0, 0, 0, .9);
+}
+.about::after {
+  content: "Classified";
+  position: absolute;
+  top: 28px;
+  right: 28px;
+  padding: 6px 12px;
+  border: 3px solid var(--red);
+  color: var(--red);
+  font: 400 1.3rem/1 Anton, sans-serif;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  transform: rotate(8deg);
+  opacity: .85;
+}
+.about h2 { font-size: clamp(1.8rem, 4vw, 2.8rem); padding-right: 150px; }
+.about-text { margin: 18px 0 26px; font: 400 clamp(1.05rem, 1.8vw, 1.25rem)/1.7 "Special Elite", monospace; }
+.about .btn { border-color: var(--paper-ink); color: var(--paper-ink); }
+.about .btn:hover { background: var(--paper-ink); color: var(--paper); }
+
+.news { padding-top: 10px; }
+.news .section-head h2 { font-size: clamp(2rem, 4vw, 3rem); }
+.news-text { color: var(--ink-soft); font-family: "Special Elite", monospace; }
+
+/* ---------- footer ---------- */
+.site-footer {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: clamp(72px, 10vw, 130px);
+  padding-block: 22px 40px;
+  border-top: 3px solid var(--red);
+  font-size: .9rem;
+  font-weight: 700;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+}
+.site-footer p { margin: 0; }
+.site-footer a { text-decoration: none; color: var(--red); }
+
+/* ---------- small screens ---------- */
+@media (max-width: 900px) {
+  .books[data-layout="pair"] { grid-template-columns: 1fr; }
+  .books[data-layout="grid"] > .book { flex-basis: calc((100% - (min(var(--cols), 3) - 1) * var(--gap)) / min(var(--cols), 3)); }
+  .series-card { grid-template-columns: 1fr; text-align: center; }
+}
+@media (max-width: 640px) {
+  .hero { min-height: 80vh; }
+  .hero-photo img { object-position: 62% 20%; }
+  .hero-caption { display: none; }
+  .books[data-layout="single"] .book { grid-template-columns: 1fr; }
+  .books[data-layout="single"] .book-cover { width: min(250px, 72%); margin: 0 auto 10px; }
+  .books[data-layout="pair"] .book { grid-template-columns: 120px minmax(0, 1fr); gap: 20px; }
+  .books[data-layout="pair"] .book-title { font-size: 1.35rem; }
+  .books[data-layout="pair"] .book-tagline { display: none; }
+  .books[data-layout="pair"] .book-meta { font-size: .8rem; padding: 10px; }
+  .books[data-layout="pair"] .book-meta dt { width: auto; }
+  .books[data-layout="pair"] .book-meta div { flex-direction: column; gap: 0; }
+  .books[data-layout="grid"] { --gap: 22px; --gap-y: 40px; }
+  .books[data-layout="grid"] > .book { flex-basis: calc((100% - var(--gap)) / 2); }
+  .books[data-layout="grid"] .book-cover { margin: 0 8px 24px 0; }
+  .books[data-layout="grid"] .book-cover img { box-shadow: 6px 6px 0 var(--red); }
+  .books[data-layout="grid"] .book-title { font-size: 1.15rem; }
+  .books[data-layout="grid"] .book-tagline { display: none; }
+  .books[data-layout="grid"] .book-cta { padding: .6em .9em; font-size: .8rem; }
+  .series-stack { height: 260px; }
+  .series-stack img { width: 115px; }
+  .about::after { top: 14px; right: 14px; font-size: 1rem; }
+  .about h2 { padding-right: 0; padding-top: 30px; }
+}

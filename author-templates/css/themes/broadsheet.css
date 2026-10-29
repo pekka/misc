@@ -44,6 +44,8 @@ p { margin: 0; }
   padding-top: 26px;
   text-align: center;
   --hdr-safe: 0px;
+  /* stick with only the nav strip showing; the masthead scrolls away */
+  --header-top: calc(-1 * var(--nav-offset, 0px));
 }
 @media (max-width: 1399px) { .site-header { padding-top: 64px; } }
 .brand { text-decoration: none; display: block; padding: 6px 0 14px; width: 100%; border-bottom: 4px double var(--rule); }

@@ -14,6 +14,10 @@
   --panel: rgba(255, 240, 210, .04);
   --line: rgba(216, 178, 106, .28);
   --glow: rgba(216, 160, 80, .28);
+  --header-bg: transparent;
+  --header-bg-scrolled: color-mix(in srgb, var(--bg) 84%, transparent);
+  --header-blur: blur(14px);
+  --header-shadow: 0 1px 0 var(--line);
 }
 :root[data-tone="light"] {
   --ink: #241c14;
@@ -38,8 +42,6 @@ p { margin: 0; }
 
 /* ---------- header (floats over the hero) ---------- */
 .site-header {
-  position: relative;
-  z-index: 2;
   display: flex;
   flex-wrap: wrap;
   align-items: center;
@@ -105,8 +107,8 @@ p { margin: 0; }
   grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
   align-items: end;
   min-height: min(82vh, 760px);
-  margin-top: -96px;
-  padding-top: 96px;
+  margin-top: calc(-1 * var(--header-h, 96px));
+  padding-top: var(--header-h, 96px);
 }
 .hero-text { position: relative; z-index: 1; padding-bottom: clamp(48px, 8vh, 96px); }
 .hero-kicker {

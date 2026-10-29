@@ -16,8 +16,12 @@
     { id: 'cellar',     name: 'Cellar',     note: 'Dark and cinematic',      swatch: ['#15110e', '#d8b26a', '#efe6d6'] },
     { id: 'poppress',   name: 'Pop Press',  note: 'Loud neo-brutalist zine', swatch: ['#ffe14d', '#ff4f9a', '#111111'] },
     { id: 'gallery',    name: 'Gallery',    note: 'Quiet museum minimal',    swatch: ['#f1f0ec', '#1d1d1b', '#9a978f'] },
+    { id: 'daylight',   name: 'Daylight',   note: 'Bright, calm, neutral',   swatch: ['#f7f5f0', '#22201c', '#a08a68'] },
+    { id: 'keynote',    name: 'Keynote',    note: 'Clean product-launch tech', swatch: ['#ffffff', '#f5f5f7', '#0071e3'] },
+    { id: 'thriller',   name: 'Thriller',   note: 'Bold, dark, high tension', swatch: ['#0b0b0c', '#e10600', '#f2f2f2'] },
+    { id: 'orbit',      name: 'Orbit',      note: 'Neon sci-fi HUD',         swatch: ['#060a14', '#36e2ff', '#ff3dbb'] },
   ];
-  const BG_PRESETS = ['#ffffff', '#f4ecdc', '#e8efe2', '#f6e2dc', '#dfe7f0', '#ffe14d', '#1c1c1c', '#15231b', '#2b1a22'];
+  const BG_PRESETS = ['#ffffff', '#f4ecdc', '#e8efe2', '#f6e2dc', '#dfe7f0', '#ffe14d', '#1c1c1c', '#15231b', '#2b1a22', '#0c1430'];
   const MIN_BOOKS = 1;
   const MAX_BOOKS = 12;
   const MAX_STACK = 5;
@@ -138,6 +142,26 @@
     if (ui.reset) ui.reset.setAttribute('aria-pressed', String(!state.bg));
   }
 
+  /* ---------- sticky header ---------- */
+
+  // Publish header measurements for the sticky-menu rules in base.css.
+  function watchHeader() {
+    const header = document.querySelector('.site-header');
+    if (!header) return () => {};
+    const nav = header.querySelector('.site-nav');
+    const measure = () => {
+      root.style.setProperty('--header-h', `${header.offsetHeight}px`);
+      if (nav) root.style.setProperty('--nav-offset', `${nav.offsetTop}px`);
+    };
+    if ('ResizeObserver' in window) new ResizeObserver(measure).observe(header);
+    addEventListener('resize', measure);
+    const onScroll = () => root.toggleAttribute('data-scrolled', scrollY > 8);
+    addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
+    measure();
+    return measure;
+  }
+
   /* ---------- UI ---------- */
 
   const ui = { swatches: [] };
@@ -205,7 +229,7 @@
       state.theme = b.dataset.theme;
       state.bg = null; // each template starts on its own background
       syncThemeButtons();
-      applyTheme(applyBg);
+      applyTheme(() => { applyBg(); measureHeader(); });
       save();
     }));
 
@@ -236,9 +260,12 @@
   /* ---------- init ---------- */
 
   readSaved();
+  const measureHeader = watchHeader();
   buildUI();
   syncThemeButtons();
   syncCount();
   renderBooks();
-  applyTheme(applyBg);
+  applyTheme(() => { applyBg(); measureHeader(); });
+  // Web fonts change the header height after load
+  if (document.fonts) document.fonts.ready.then(measureHeader);
 })();
