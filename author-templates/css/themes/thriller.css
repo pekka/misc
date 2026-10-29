@@ -147,7 +147,7 @@ p { margin: 0; }
 .hero-kicker::before { content: ""; width: 10px; height: 10px; border-radius: 50%; background: var(--red); box-shadow: 0 0 12px var(--red); }
 .hero-title {
   font-size: clamp(3.6rem, 11vw, 9.5rem);
-  line-height: .86;
+  line-height: 1.02;
   color: var(--ink);
 }
 .hero-sub {
