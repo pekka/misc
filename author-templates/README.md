@@ -55,3 +55,24 @@ Settings are also kept in `localStorage`.
 
 Copy a theme file, change it, and add an entry to `THEMES` in `js/switcher.js`.
 Style `.books[data-layout="single|pair|grid"]` and both `data-tone` values.
+
+## Original prompt
+
+Please let's build a proof of concept using the /landing-page skill. We are building a template for a SaaS for authors. Please download the information (text, images) from this concept website: https://site.sodabadger.com/author/george-guttenberg
+
+Then please build an HTML and JavaScript structure that does the following:
+
+* Create five styles for author pages based on the information that we downloaded.
+* Please suggest five styles that we can switch from and to using a JavaScript switcher in the top-right corner.
+* This switcher, when clicked, also allows us to set the number of books on the page and set the background colour.
+* Please come up with five very different-looking styles for author websites.
+* Feel free to use any fonts that you can find on Google Fonts.
+* The point is to create diversity of choice of style, and each template should be in its own CSS file that we switch over using JavaScript.
+
+Let's get to it and give it a try. Feel free to be very creative, also regarding the presentation of the books. One important point is that we should be able to adjust the number of books and just copy that one book that is there. The template should look decent with any number of books. For example:
+
+* If there's only one book, then that cover should be relatively large, and the technical information should be to the right of the book. It should all be centred.
+* With two books, maybe the same.
+* With three books, we might need a grid like there is on the current page.
+
+Each template needs to be able to deal with any number of books.
