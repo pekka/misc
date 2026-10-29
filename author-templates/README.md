@@ -1,7 +1,7 @@
 # Author page templates (proof of concept)
 
 One HTML page for an author (content from the George Guttenberg concept site),
-nine interchangeable styles, and a switcher in the top-right corner.
+ten interchangeable styles, and a switcher in the top-right corner.
 
 Open `index.html` in a browser. No build step.
 
@@ -11,6 +11,7 @@ Open `index.html` in a browser. No build step.
 - `js/switcher.js` – the switcher: template, number of books (1–12), background colour.
 - `css/base.css` – switcher UI and a few shared guards. Loaded after the theme.
 - `css/themes/*.css` – one file per style, each loads its own Google Fonts:
+  - `badger.css` – **the default.** Built from the Soda Badger publisher stylesheet: black top bar, amber buttons, bordered cards, Georgia headings, amber eyebrows and pill badges.
   - `orchard.css` – warm and rustic: Fraunces + Lora, arched portrait, fanned series stack.
   - `broadsheet.css` – newspaper front page: blackletter masthead, Playfair Display, column rules, numbered books.
   - `cellar.css` – dark and cinematic: Cormorant Garamond + Manrope, faded full-bleed portrait, 3D covers.

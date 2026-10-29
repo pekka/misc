@@ -10,7 +10,9 @@
  * State comes from the URL (?theme=&books=&bg=) first, then localStorage.
  */
 (() => {
+  const DEFAULT_THEME = 'badger';
   const THEMES = [
+    { id: 'badger',     name: 'Badger',     note: 'Default publisher style', swatch: ['#20292e', '#f8f7f4', '#ffb52e'] },
     { id: 'orchard',    name: 'Orchard',    note: 'Warm, rustic, hand-made', swatch: ['#f4ecdc', '#2f4a2b', '#b3322a'] },
     { id: 'broadsheet', name: 'Broadsheet', note: 'Newspaper front page',    swatch: ['#f3efe4', '#111111', '#b4141e'] },
     { id: 'cellar',     name: 'Cellar',     note: 'Dark and cinematic',      swatch: ['#15110e', '#d8b26a', '#efe6d6'] },
@@ -36,7 +38,7 @@
   const stack = document.querySelector('.series-stack');
   const stackTemplate = stack ? stack.querySelector('img').cloneNode(true) : null;
 
-  const state = { theme: 'orchard', count: 1, bg: null };
+  const state = { theme: DEFAULT_THEME, count: 1, bg: null };
 
   function readSaved() {
     try {
@@ -46,7 +48,7 @@
     if (q.has('theme')) state.theme = q.get('theme');
     if (q.has('books')) state.count = parseInt(q.get('books'), 10);
     if (q.has('bg')) state.bg = q.get('bg') === 'default' ? null : q.get('bg');
-    if (!THEMES.some(t => t.id === state.theme)) state.theme = 'orchard';
+    if (!THEMES.some(t => t.id === state.theme)) state.theme = DEFAULT_THEME;
     state.count = clampCount(state.count);
     if (state.bg && !/^#[0-9a-f]{6}$/i.test(state.bg)) state.bg = null;
   }

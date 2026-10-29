@@ -61,7 +61,10 @@ html[data-scrolled] body .site-header::before {
 
 /* Leave room for the switcher button in the top-right corner.
    A theme with a centred header sets --hdr-safe: 0px and adds top space instead. */
-html body .site-header { padding-right: var(--hdr-safe, 64px); }
+html body .site-header { padding-right: var(--hdr-safe, 112px); }
+@media (max-width: 520px) {
+  html body .site-header { padding-right: var(--hdr-safe, 60px); }
+}
 @media (min-width: 1400px) {
   html body .site-header { padding-right: 0; }
 }
