@@ -182,7 +182,6 @@ const state = {
     route: { view: 'library' },
     preview: {},
     analysis: {},
-    openMenu: null,
 };
 
 const app = document.getElementById('app');
@@ -508,7 +507,9 @@ function renderInspector(book, editionKey) {
 
     const analyse = `<button class="btn" type="button" data-action="analyse" data-uid="${staged.uid}">Analyse <span class="price">${PRICES.analyse} cr</span></button>`;
     const tweak = `<button class="btn" type="button" data-action="tweak" data-uid="${staged.uid}">Make minor tweaks <span class="price">${prices.tweak} cr</span></button>`;
-    const fresh = `<button class="btn" type="button" data-action="new-draft" data-uid="${staged.uid}">Create new draft from this ${staged.kind === 'draft' ? 'draft' : 'cover'} <span class="price">from ${prices.draft} cr</span></button>`;
+    const compare = `<button class="btn" type="button" data-action="compare" data-uid="${staged.uid}">Compare with other covers</button>`;
+    const download = `<button class="btn" type="button" data-action="download" data-uid="${staged.uid}">Download</button>`;
+    const fresh = `<button class="btn" type="button" data-action="new-draft" data-uid="${staged.uid}">Create new draft from this cover <span class="price">from ${prices.draft} cr</span></button>`;
 
     let primary = '';
     let danger = '';
@@ -530,7 +531,9 @@ function renderInspector(book, editionKey) {
             ${primary}
             ${analyse}
             ${tweak}
+            ${compare}
             ${fresh}
+            ${download}
         </div>
         ${renderAnalysis(staged, meta)}
         <div class="danger-zone">${danger}</div>
@@ -592,7 +595,10 @@ function renderFiles(book, editionKey, kind) {
                 <h2>Drafts</h2>
                 <p>Low resolution and cheap to make, so try a few. Upscale the one you like.</p>
             </div>
-            <button class="btn" type="button" data-action="new-draft">New draft <span class="price">from ${prices.draft} cr</span></button>
+            <div class="files-head-actions">
+                <button class="btn" type="button">Upload cover</button>
+                <button class="btn" type="button" data-action="new-draft">New draft <span class="price">from ${prices.draft} cr</span></button>
+            </div>
         </div>`
         : `<div class="files-head">
             <div>
@@ -639,15 +645,6 @@ function renderTile(entry, editionData, meta, staged) {
     } else {
         primary = `<button class="btn btn-small" type="button" data-action="use" data-uid="${entry.uid}">Use as cover</button>`;
     }
-    const menuOpen = state.openMenu === entry.uid;
-    const menu = isCurrent ? '' : `<div class="menu">
-        <button class="btn btn-small" type="button" aria-haspopup="true" aria-expanded="${menuOpen}" aria-label="More actions" data-action="menu" data-uid="${entry.uid}">⋯</button>
-        ${menuOpen ? `<div class="menu-list">
-            <button type="button" data-action="preview" data-uid="${entry.uid}">Show on stage</button>
-            <button type="button" data-action="download" data-uid="${entry.uid}">Download</button>
-            <button type="button" class="is-danger" data-action="delete" data-uid="${entry.uid}">Delete</button>
-        </div>` : ''}
-    </div>`;
 
     return `<div class="file ${onStage ? 'is-on-stage' : ''}" data-uid="${entry.uid}">
         <button class="file-preview" type="button" data-action="preview" data-uid="${entry.uid}" aria-label="Show this ${entry.kind === 'draft' ? 'draft' : 'file'} on the stage">
@@ -657,7 +654,26 @@ function renderTile(entry, editionData, meta, staged) {
             <span>${entry.made}</span>
             ${isCurrent ? '<span class="file-tag-current">Current cover</span>' : ''}
         </div>
-        ${primary || menu ? `<div class="file-actions">${primary}${menu}</div>` : ''}
+        ${primary ? `<div class="file-actions">${primary}</div>` : ''}
+        ${entry.kind === 'draft' ? renderDraftActions(entry, prices) : renderFileActions(entry, isCurrent)}
+    </div>`;
+}
+
+function renderDraftActions(entry, prices) {
+    return `<div class="file-more">
+        <button type="button" data-action="tile-analyse" data-uid="${entry.uid}">Analyse <span class="price">${PRICES.analyse} cr</span></button>
+        <button type="button" data-action="tweak" data-uid="${entry.uid}">Make minor tweaks <span class="price">${prices.tweak} cr</span></button>
+        <button type="button" data-action="compare" data-uid="${entry.uid}">Compare with other covers</button>
+        <button type="button" data-action="new-draft" data-uid="${entry.uid}">Create new draft from this cover <span class="price">${prices.draft} cr</span></button>
+        <button type="button" data-action="download" data-uid="${entry.uid}">Download</button>
+        <button type="button" class="is-danger" data-action="delete" data-uid="${entry.uid}">Delete draft</button>
+    </div>`;
+}
+
+function renderFileActions(entry, isCurrent) {
+    return `<div class="file-more">
+        <button type="button" data-action="download" data-uid="${entry.uid}">Download</button>
+        ${isCurrent ? '' : `<button type="button" class="is-danger" data-action="delete" data-uid="${entry.uid}">Delete file</button>`}
     </div>`;
 }
 
@@ -830,7 +846,6 @@ function deleteFile(uid) {
     const { book, editionKey, editionData } = currentContext();
     const index = editionData.files.findIndex(entry => entry.uid === uid);
     const [removed] = editionData.files.splice(index, 1);
-    state.openMenu = null;
     if (state.preview[previewKey(book.id, editionKey)] === uid) delete state.preview[previewKey(book.id, editionKey)];
     render();
     toast(removed.kind === 'draft' ? 'Draft deleted.' : 'File deleted.', {
@@ -872,7 +887,7 @@ function openDraftDialog(sourceUid) {
     const select = document.getElementById('draft-start');
     const options = [];
     if (sourceFile) {
-        const label = sourceFile.uid === editionData.current ? `This ${meta.name.toLowerCase()} cover` : `The ${sourceFile.kind === 'draft' ? 'draft' : 'file'} on the stage`;
+        const label = sourceFile.uid === editionData.current ? `This ${meta.name.toLowerCase()} cover` : `This ${sourceFile.kind === 'draft' ? 'draft' : 'production-ready file'}`;
         options.push({ value: `file:${sourceFile.uid}`, label, picture: sourceFile.picture });
     }
     EDITIONS.filter(entry => entry.key !== editionKey).forEach(entry => {
@@ -930,6 +945,51 @@ draftDialog.addEventListener('close', () => {
     scrollToFile(created[created.length - 1].uid);
 });
 
+/* Compare dialog */
+
+const compareDialog = document.getElementById('compare-dialog');
+let compareContext = null;
+
+function fileLabel(entry, editionData) {
+    if (entry.uid === editionData.current) return 'Current cover';
+    return `${entry.kind === 'draft' ? 'Draft' : 'Production-ready'}, ${entry.made}`;
+}
+
+function openCompareDialog(uid) {
+    const { editionData, meta } = currentContext();
+    const left = findFile(editionData, uid);
+    const others = editionData.files.filter(entry => entry.state === 'done' && entry.uid !== uid);
+    const current = others.find(entry => entry.uid === editionData.current);
+    compareContext = { editionData, left, others, rightUid: (current || others[0] || {}).uid };
+    compareDialog.classList.toggle('is-wrap', meta.shape === 'wrap');
+    renderCompare();
+    compareDialog.showModal();
+}
+
+function renderCompare() {
+    const { editionData, left, others, rightUid } = compareContext;
+    const right = others.find(entry => entry.uid === rightUid);
+    document.getElementById('compare-left').src = source(left.picture);
+    document.getElementById('compare-left-label').textContent = `This ${left.kind === 'draft' ? 'draft' : 'file'}, ${left.made}`;
+    const rightFigure = document.getElementById('compare-right-figure');
+    rightFigure.hidden = !right;
+    if (right) {
+        document.getElementById('compare-right').src = source(right.picture);
+        document.getElementById('compare-right-label').textContent = fileLabel(right, editionData);
+    }
+    const strip = document.getElementById('compare-strip');
+    strip.innerHTML = others.length
+        ? others.map(entry => `<button type="button" class="compare-pick" data-compare="${entry.uid}" aria-pressed="${entry.uid === rightUid}" aria-label="${fileLabel(entry, editionData)}"><img src="${source(entry.picture)}" alt=""><span>${fileLabel(entry, editionData)}</span></button>`).join('')
+        : '<p class="action-hint">There is nothing else in this edition to compare with yet.</p>';
+}
+
+document.getElementById('compare-strip').addEventListener('click', event => {
+    const pick = event.target.closest('[data-compare]');
+    if (!pick) return;
+    compareContext.rightUid = pick.dataset.compare;
+    renderCompare();
+});
+
 /* Tweak dialog */
 
 const tweakDialog = document.getElementById('tweak-dialog');
@@ -973,10 +1033,7 @@ tweakDialog.addEventListener('close', () => {
 
 app.addEventListener('click', event => {
     const target = event.target.closest('[data-action]');
-    if (!target) {
-        if (state.openMenu) { state.openMenu = null; render(); }
-        return;
-    }
+    if (!target) return;
     const { action, uid } = target.dataset;
 
     if (action === 'add-book') {
@@ -995,13 +1052,7 @@ app.addEventListener('click', event => {
         location.hash = `#/book/${book.id}/${target.dataset.edition}`;
         return;
     }
-    if (action === 'menu') {
-        state.openMenu = state.openMenu === uid ? null : uid;
-        render();
-        return;
-    }
     if (action === 'preview') {
-        state.openMenu = null;
         state.preview[previewKey(book.id, editionKey)] = uid;
         render();
         window.scrollTo({ top: 0, behavior: reducedMotion.matches ? 'auto' : 'smooth' });
@@ -1016,6 +1067,13 @@ app.addEventListener('click', event => {
     if (action === 'upscale') { upscale(uid); return; }
     if (action === 'analyse') { analyse(uid); return; }
     if (action === 'tweak') { openTweakDialog(uid); return; }
+    if (action === 'compare') { openCompareDialog(uid); return; }
+    if (action === 'tile-analyse') {
+        state.preview[previewKey(book.id, editionKey)] = uid;
+        analyse(uid);
+        window.scrollTo({ top: 0, behavior: reducedMotion.matches ? 'auto' : 'smooth' });
+        return;
+    }
     if (action === 'tweak-from-analysis') {
         const picked = [...app.querySelectorAll(`[data-suggestions="${uid}"] input:checked`)].map(input => input.value);
         openTweakDialog(uid, picked.join('\n'));
@@ -1026,11 +1084,7 @@ app.addEventListener('click', event => {
     if (action === 'delete') { deleteFile(uid); return; }
     if (action === 'copy-from') { copyFrom(target.dataset.from); return; }
     if (action === 'adapt-from') { adaptFrom(target.dataset.from); return; }
-    if (action === 'download') {
-        state.openMenu = null;
-        render();
-        toast('Download started.');
-    }
+    if (action === 'download') toast('Download started.');
 });
 
 app.addEventListener('keydown', event => {
@@ -1040,13 +1094,6 @@ app.addEventListener('keydown', event => {
     const index = tabs.indexOf(tab);
     const next = tabs[(index + (event.key === 'ArrowRight' ? 1 : -1) + tabs.length) % tabs.length];
     location.hash = `#/book/${state.route.bookId}/${next.dataset.edition}`;
-});
-
-document.addEventListener('keydown', event => {
-    if (event.key === 'Escape' && state.openMenu) {
-        state.openMenu = null;
-        render();
-    }
 });
 
 /* Routing */
@@ -1068,7 +1115,6 @@ function render() {
 window.addEventListener('hashchange', () => {
     const previous = state.route;
     state.route = parseRoute();
-    state.openMenu = null;
     render();
     if (previous.view !== state.route.view || previous.bookId !== state.route.bookId) {
         window.scrollTo(0, 0);

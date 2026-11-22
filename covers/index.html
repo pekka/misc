@@ -81,6 +81,28 @@
         </form>
     </dialog>
 
+    <dialog class="sheet sheet-wide" id="compare-dialog" aria-labelledby="compare-title">
+        <form method="dialog" class="sheet-form">
+            <h2 id="compare-title">Compare with other covers</h2>
+            <div class="compare">
+                <figure>
+                    <img id="compare-left" alt="">
+                    <figcaption id="compare-left-label"></figcaption>
+                </figure>
+                <figure id="compare-right-figure">
+                    <img id="compare-right" alt="">
+                    <figcaption id="compare-right-label"></figcaption>
+                </figure>
+            </div>
+            <p class="field-label">Compare with</p>
+            <div class="compare-strip" id="compare-strip"></div>
+            <div class="sheet-foot">
+                <span class="cost-note">Comparing is free.</span>
+                <button class="btn btn-primary" value="close">Done</button>
+            </div>
+        </form>
+    </dialog>
+
     <dialog class="sheet sheet-small" id="confirm-dialog" aria-labelledby="confirm-title">
         <form method="dialog" class="sheet-form">
             <h2 id="confirm-title"></h2>
