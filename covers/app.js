@@ -182,6 +182,7 @@ const state = {
     route: { view: 'library' },
     preview: {},
     analysis: {},
+    openMenu: null,
 };
 
 const app = document.getElementById('app');
@@ -507,8 +508,12 @@ function renderInspector(book, editionKey) {
 
     const analyse = `<button class="btn" type="button" data-action="analyse" data-uid="${staged.uid}">Analyse <span class="price">${PRICES.analyse} cr</span></button>`;
     const tweak = `<button class="btn" type="button" data-action="tweak" data-uid="${staged.uid}">Make minor tweaks <span class="price">${prices.tweak} cr</span></button>`;
-    const compare = `<button class="btn" type="button" data-action="compare" data-uid="${staged.uid}">Compare with other covers</button>`;
-    const download = `<button class="btn" type="button" data-action="download" data-uid="${staged.uid}">Download</button>`;
+    const compareIcon = '<svg viewBox="0 0 16 16" aria-hidden="true"><rect x="1.5" y="2.5" width="5.5" height="11" rx="0.5"/><rect x="9" y="2.5" width="5.5" height="11" rx="0.5"/></svg>';
+    const downloadIcon = '<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 2v8.5M4.5 7 8 10.5 11.5 7M2.5 13.5h11"/></svg>';
+    const tools = `<div class="tool-pair">
+        <button class="btn btn-tool" type="button" data-action="compare" data-uid="${staged.uid}">${compareIcon}Compare</button>
+        <button class="btn btn-tool" type="button" data-action="download" data-uid="${staged.uid}">${downloadIcon}Download</button>
+    </div>`;
     const fresh = `<button class="btn" type="button" data-action="new-draft" data-uid="${staged.uid}">Create new draft from this cover <span class="price">from ${prices.draft} cr</span></button>`;
 
     let primary = '';
@@ -531,9 +536,8 @@ function renderInspector(book, editionKey) {
             ${primary}
             ${analyse}
             ${tweak}
-            ${compare}
             ${fresh}
-            ${download}
+            ${tools}
         </div>
         ${renderAnalysis(staged, meta)}
         <div class="danger-zone">${danger}</div>
@@ -654,26 +658,24 @@ function renderTile(entry, editionData, meta, staged) {
             <span>${entry.made}</span>
             ${isCurrent ? '<span class="file-tag-current">Current cover</span>' : ''}
         </div>
-        ${primary ? `<div class="file-actions">${primary}</div>` : ''}
-        ${entry.kind === 'draft' ? renderDraftActions(entry, prices) : renderFileActions(entry, isCurrent)}
+        <div class="file-actions">${primary}${renderTileMenu(entry, prices, isCurrent)}</div>
     </div>`;
 }
 
-function renderDraftActions(entry, prices) {
-    return `<div class="file-more">
-        <button type="button" data-action="tile-analyse" data-uid="${entry.uid}">Analyse <span class="price">${PRICES.analyse} cr</span></button>
-        <button type="button" data-action="tweak" data-uid="${entry.uid}">Make minor tweaks <span class="price">${prices.tweak} cr</span></button>
-        <button type="button" data-action="compare" data-uid="${entry.uid}">Compare with other covers</button>
-        <button type="button" data-action="new-draft" data-uid="${entry.uid}">Create new draft from this cover <span class="price">${prices.draft} cr</span></button>
-        <button type="button" data-action="download" data-uid="${entry.uid}">Download</button>
-        <button type="button" class="is-danger" data-action="delete" data-uid="${entry.uid}">Delete draft</button>
-    </div>`;
-}
-
-function renderFileActions(entry, isCurrent) {
-    return `<div class="file-more">
-        <button type="button" data-action="download" data-uid="${entry.uid}">Download</button>
-        ${isCurrent ? '' : `<button type="button" class="is-danger" data-action="delete" data-uid="${entry.uid}">Delete file</button>`}
+function renderTileMenu(entry, prices, isCurrent) {
+    const open = state.openMenu === entry.uid;
+    const deleteLabel = entry.kind === 'draft' ? 'Delete draft' : 'Delete file';
+    const items = open ? `<div class="menu-list" role="menu">
+        <button type="button" role="menuitem" data-action="tile-analyse" data-uid="${entry.uid}">Analyse <span class="price">${PRICES.analyse} cr</span></button>
+        <button type="button" role="menuitem" data-action="tweak" data-uid="${entry.uid}">Make minor tweaks <span class="price">${prices.tweak} cr</span></button>
+        <button type="button" role="menuitem" data-action="compare" data-uid="${entry.uid}">Compare with other covers</button>
+        <button type="button" role="menuitem" data-action="new-draft" data-uid="${entry.uid}">Create new draft from this cover <span class="price">${prices.draft} cr</span></button>
+        <button type="button" role="menuitem" data-action="download" data-uid="${entry.uid}">Download</button>
+        ${isCurrent ? '' : `<button type="button" role="menuitem" class="is-danger" data-action="delete" data-uid="${entry.uid}">${deleteLabel}</button>`}
+    </div>` : '';
+    return `<div class="menu">
+        <button class="btn btn-small" type="button" aria-haspopup="menu" aria-expanded="${open}" aria-label="More actions" data-action="menu" data-uid="${entry.uid}">⋯</button>
+        ${items}
     </div>`;
 }
 
@@ -1033,8 +1035,12 @@ tweakDialog.addEventListener('close', () => {
 
 app.addEventListener('click', event => {
     const target = event.target.closest('[data-action]');
-    if (!target) return;
+    if (!target) {
+        if (state.openMenu) closeMenu();
+        return;
+    }
     const { action, uid } = target.dataset;
+    if (state.openMenu && action !== 'menu') closeMenu();
 
     if (action === 'add-book') {
         toast('Adding books lives in the manuscript app. This mockup covers the cover studio only.');
@@ -1050,6 +1056,13 @@ app.addEventListener('click', event => {
 
     if (action === 'tab') {
         location.hash = `#/book/${book.id}/${target.dataset.edition}`;
+        return;
+    }
+    if (action === 'menu') {
+        state.openMenu = state.openMenu === uid ? null : uid;
+        render();
+        const first = app.querySelector('.menu-list button');
+        if (first) first.focus();
         return;
     }
     if (action === 'preview') {
@@ -1096,6 +1109,19 @@ app.addEventListener('keydown', event => {
     location.hash = `#/book/${state.route.bookId}/${next.dataset.edition}`;
 });
 
+function closeMenu() {
+    state.openMenu = null;
+    render();
+}
+
+document.addEventListener('keydown', event => {
+    if (event.key !== 'Escape' || !state.openMenu) return;
+    const uid = state.openMenu;
+    closeMenu();
+    const trigger = app.querySelector(`[data-action="menu"][data-uid="${uid}"]`);
+    if (trigger) trigger.focus();
+});
+
 /* Routing */
 
 function parseRoute() {
@@ -1115,6 +1141,7 @@ function render() {
 window.addEventListener('hashchange', () => {
     const previous = state.route;
     state.route = parseRoute();
+    state.openMenu = null;
     render();
     if (previous.view !== state.route.view || previous.bookId !== state.route.bookId) {
         window.scrollTo(0, 0);
