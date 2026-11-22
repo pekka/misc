@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Covers · ChiantiFerret</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Schibsted+Grotesk:wght@400;500;600;700&family=Young+Serif&display=swap">
+    <link rel="stylesheet" href="app.css">
+</head>
+<body>
+    <a class="skip-link" href="#app">Skip to content</a>
+
+    <header class="topbar">
+        <a class="wordmark" href="#/">ChiantiFerret</a>
+        <div class="topbar-account">
+            <span class="credit-balance"><strong id="credit-balance">4,037</strong> credits</span>
+            <span class="avatar" aria-label="Signed in as Pekka">P</span>
+        </div>
+    </header>
+
+    <main id="app" tabindex="-1"></main>
+
+    <dialog class="sheet" id="draft-dialog" aria-labelledby="draft-dialog-title">
+        <form method="dialog" class="sheet-form" id="draft-form">
+            <div class="sheet-head">
+                <img class="sheet-thumb" id="draft-source-thumb" alt="">
+                <div>
+                    <h2 id="draft-dialog-title">Create new draft from this cover</h2>
+                    <p class="sheet-sub" id="draft-dialog-sub"></p>
+                </div>
+            </div>
+
+            <label class="field-label" for="draft-start">Start from</label>
+            <select class="field" id="draft-start"></select>
+
+            <label class="field-label" for="draft-prompt">What should the new draft look like?</label>
+            <textarea class="field" id="draft-prompt" rows="4" placeholder="For example: same orchard scene at dusk, warmer light, title in a lighter serif"></textarea>
+
+            <fieldset class="keep" id="draft-keep">
+                <legend class="field-label">Keep from the starting cover</legend>
+                <label><input type="checkbox" name="keep" value="text" checked> Title and author text</label>
+                <label><input type="checkbox" name="keep" value="layout" checked> Layout</label>
+                <label><input type="checkbox" name="keep" value="palette"> Colour palette</label>
+                <label><input type="checkbox" name="keep" value="art"> Illustration</label>
+            </fieldset>
+
+            <fieldset class="segmented">
+                <legend class="field-label">How many variations?</legend>
+                <label><input type="radio" name="count" value="1"> <span>1</span></label>
+                <label><input type="radio" name="count" value="2" checked> <span>2</span></label>
+                <label><input type="radio" name="count" value="4"> <span>4</span></label>
+            </fieldset>
+
+            <div class="sheet-foot">
+                <p class="cost-note" id="draft-cost-note"></p>
+                <button class="btn btn-quiet" value="cancel" formnovalidate>Cancel</button>
+                <button class="btn btn-primary" value="confirm" id="draft-submit">Create drafts</button>
+            </div>
+        </form>
+    </dialog>
+
+    <dialog class="sheet" id="tweak-dialog" aria-labelledby="tweak-dialog-title">
+        <form method="dialog" class="sheet-form" id="tweak-form">
+            <div class="sheet-head">
+                <img class="sheet-thumb" id="tweak-source-thumb" alt="">
+                <div>
+                    <h2 id="tweak-dialog-title">Make minor tweaks</h2>
+                    <p class="sheet-sub">Keeps the cover as it is and changes only what you list. You get a new draft; the original stays untouched.</p>
+                </div>
+            </div>
+            <label class="field-label" for="tweak-prompt">What should change?</label>
+            <textarea class="field" id="tweak-prompt" rows="4" required></textarea>
+            <div class="chips" id="tweak-chips" aria-label="Common tweaks"></div>
+            <div class="sheet-foot">
+                <p class="cost-note" id="tweak-cost-note"></p>
+                <button class="btn btn-quiet" value="cancel" formnovalidate>Cancel</button>
+                <button class="btn btn-primary" value="confirm">Make tweaked draft</button>
+            </div>
+        </form>
+    </dialog>
+
+    <dialog class="sheet sheet-small" id="confirm-dialog" aria-labelledby="confirm-title">
+        <form method="dialog" class="sheet-form">
+            <h2 id="confirm-title"></h2>
+            <p class="sheet-sub" id="confirm-body"></p>
+            <div class="sheet-foot">
+                <button class="btn btn-quiet" value="cancel">Cancel</button>
+                <button class="btn btn-primary" value="confirm" id="confirm-submit"></button>
+            </div>
+        </form>
+    </dialog>
+
+    <div class="toasts" id="toasts" aria-live="polite"></div>
+
+    <script src="app.js"></script>
+</body>
+</html>
