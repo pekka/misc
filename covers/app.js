@@ -1061,6 +1061,7 @@ app.addEventListener('click', event => {
     if (action === 'menu') {
         state.openMenu = state.openMenu === uid ? null : uid;
         render();
+        placeMenu();
         const first = app.querySelector('.menu-list button');
         if (first) first.focus();
         return;
@@ -1108,6 +1109,18 @@ app.addEventListener('keydown', event => {
     const next = tabs[(index + (event.key === 'ArrowRight' ? 1 : -1) + tabs.length) % tabs.length];
     location.hash = `#/book/${state.route.bookId}/${next.dataset.edition}`;
 });
+
+function placeMenu() {
+    const list = app.querySelector('.menu-list');
+    if (!list) return;
+    const margin = 8;
+    const topbarHeight = document.querySelector('.topbar').offsetHeight;
+    let rect = list.getBoundingClientRect();
+    if (rect.left < margin) list.classList.add('opens-right');
+    rect = list.getBoundingClientRect();
+    if (rect.right > window.innerWidth - margin) list.classList.remove('opens-right');
+    if (rect.top < topbarHeight + margin) list.classList.add('opens-down');
+}
 
 function closeMenu() {
     state.openMenu = null;

@@ -635,6 +635,8 @@ button, input, select, textarea { font: inherit; color: inherit; }
     border-radius: var(--radius);
     box-shadow: 0 8px 24px rgba(0, 0, 0, 0.14);
 }
+.menu-list.opens-right { right: auto; left: 0; }
+.menu-list.opens-down { bottom: auto; top: calc(100% + 4px); }
 .menu-list button {
     display: flex;
     justify-content: space-between;
